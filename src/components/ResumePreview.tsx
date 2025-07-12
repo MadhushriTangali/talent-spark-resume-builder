@@ -145,6 +145,47 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
               </div>
             )}
 
+            {/* Projects */}
+            {resumeData.projects && resumeData.projects.length > 0 && (
+              <div className="mb-8 print:mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
+                  PROJECTS
+                </h2>
+                <div className="space-y-4">
+                  {resumeData.projects.map((project: any, index: number) => (
+                    <div key={index}>
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
+                          {project.technologies && project.technologies.length > 0 && (
+                            <p className="text-sm text-purple-600 font-medium">
+                              Technologies: {project.technologies.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                        <div className="text-right text-sm text-gray-600">
+                          <p>{project.startDate} - {project.current ? "Present" : project.endDate}</p>
+                        </div>
+                      </div>
+                      <p className="text-gray-700 mb-2">{project.description}</p>
+                      <div className="flex space-x-4 text-sm">
+                        {project.link && (
+                          <a href={project.link} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                            Live Demo
+                          </a>
+                        )}
+                        {project.github && (
+                          <a href={project.github} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                            GitHub
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Education */}
             {resumeData.education && resumeData.education.length > 0 && (
               <div className="mb-8 print:mb-6">

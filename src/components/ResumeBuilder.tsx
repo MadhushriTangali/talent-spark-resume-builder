@@ -9,24 +9,31 @@ import { ExperienceForm } from "./ExperienceForm";
 import { EducationForm } from "./EducationForm";
 import { SkillsForm } from "./SkillsForm";
 import { SummaryForm } from "./SummaryForm";
+import { ProjectsForm } from "./ProjectsForm";
 import { ATSScoreCard } from "./ATSScoreCard";
+import { useResumeStorage } from "@/hooks/useResumeStorage";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResumeBuilderProps {
   resumeData: any;
   setResumeData: (data: any) => void;
   onPreview: () => void;
   onBack: () => void;
+  resumeId?: string;
 }
 
-export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: ResumeBuilderProps) => {
+export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack, resumeId }: ResumeBuilderProps) => {
   const [currentSection, setCurrentSection] = useState(0);
+  const { saveResume, updateResume } = useResumeStorage();
+  const { toast } = useToast();
 
   const sections = [
     { id: "personal", title: "Personal Information", component: PersonalInfoForm, icon: "👤" },
     { id: "summary", title: "Professional Summary", component: SummaryForm, icon: "📝" },
     { id: "experience", title: "Work Experience", component: ExperienceForm, icon: "💼" },
     { id: "education", title: "Education", component: EducationForm, icon: "🎓" },
-    { id: "skills", title: "Skills & Expertise", component: SkillsForm, icon: "⚡" }
+    { id: "skills", title: "Skills & Expertise", component: SkillsForm, icon: "⚡" },
+    { id: "projects", title: "Projects", component: ProjectsForm, icon: "🚀" }
   ];
 
   const getCurrentSectionCompletion = () => {
@@ -42,6 +49,8 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
         return resumeData.education && resumeData.education.length > 0;
       case "skills":
         return resumeData.skills && resumeData.skills.length > 0;
+      case "projects":
+        return resumeData.projects && resumeData.projects.length > 0;
       default:
         return false;
     }
@@ -49,7 +58,6 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
 
   const getOverallCompletion = () => {
     const completedSections = sections.filter((_, index) => {
-      const oldSection = currentSection;
       const completion = sections.map((s, i) => {
         switch (s.id) {
           case "personal":
@@ -62,6 +70,8 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
             return resumeData.education && resumeData.education.length > 0;
           case "skills":
             return resumeData.skills && resumeData.skills.length > 0;
+          case "projects":
+            return resumeData.projects && resumeData.projects.length > 0;
           default:
             return false;
         }
@@ -69,6 +79,18 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
       return completion[index];
     });
     return Math.round((completedSections.length / sections.length) * 100);
+  };
+
+  const handleSaveResume = async () => {
+    try {
+      if (resumeId) {
+        await updateResume(resumeId, resumeData);
+      } else {
+        await saveResume(resumeData);
+      }
+    } catch (error) {
+      console.error('Error saving resume:', error);
+    }
   };
 
   const CurrentSectionComponent = sections[currentSection].component;
@@ -92,6 +114,14 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
               <Badge variant="secondary" className="bg-purple-100 text-purple-700">
                 {getOverallCompletion()}% Complete
               </Badge>
+              <Button 
+                variant="outline" 
+                onClick={handleSaveResume}
+                className="border-green-200 text-green-700 hover:bg-green-50"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Save
+              </Button>
               <Button 
                 variant="outline" 
                 onClick={onPreview}
@@ -127,6 +157,8 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
                         return resumeData.education && resumeData.education.length > 0;
                       case "skills":
                         return resumeData.skills && resumeData.skills.length > 0;
+                      case "projects":
+                        return resumeData.projects && resumeData.projects.length > 0;
                       default:
                         return false;
                     }
