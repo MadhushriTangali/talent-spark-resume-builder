@@ -1,10 +1,12 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Download, Edit, Mail, Phone, MapPin, Linkedin, Globe, Save } from "lucide-react";
 import { useResumeStorage } from "@/hooks/useResumeStorage";
 import { useToast } from "@/hooks/use-toast";
 import { AIAssistant } from "./AIAssistant";
+import { SaveResumeDialog } from "./SaveResumeDialog";
 
 interface ResumePreviewProps {
   resumeData: any;
@@ -16,17 +18,41 @@ interface ResumePreviewProps {
 export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePreviewProps) => {
   const { saveResume, updateResume } = useResumeStorage();
   const { toast } = useToast();
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
   const handleDownload = () => {
+    // Hide all UI elements during print
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      @media print {
+        body * { visibility: hidden; }
+        #resume-content, #resume-content * { visibility: visible; }
+        #resume-content { 
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+        }
+        .print-hide { display: none !important; }
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
     window.print();
+    
+    // Remove the style after printing
+    setTimeout(() => {
+      document.head.removeChild(styleElement);
+    }, 1000);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (title: string) => {
     try {
+      const resumeDataWithTitle = { ...resumeData, title };
       if (resumeId) {
-        await updateResume(resumeId, resumeData);
+        await updateResume(resumeId, resumeDataWithTitle);
       } else {
-        await saveResume(resumeData);
+        await saveResume(resumeDataWithTitle, title);
       }
       toast({
         title: "Success",
@@ -55,7 +81,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-purple-100 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-purple-100 sticky top-0 z-50 print-hide">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -69,7 +95,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
             </div>
             <div className="flex items-center space-x-3">
               <Button 
-                onClick={handleSave}
+                onClick={() => setSaveDialogOpen(true)}
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
               >
                 <Save className="h-4 w-4 mr-2" />
@@ -97,7 +123,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
 
       <div className="container mx-auto px-4 py-8">
         {/* Resume Preview */}
-        <Card className="max-w-4xl mx-auto bg-white shadow-2xl print:shadow-none print:max-w-none">
+        <Card id="resume-content" className="max-w-4xl mx-auto bg-white shadow-2xl print:shadow-none print:max-w-none">
           <CardContent className="p-8 print:p-6">
             {/* Header Section */}
             <div className="text-center mb-8 print:mb-6">
@@ -316,7 +342,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
         </Card>
 
         {/* Print Instructions */}
-        <div className="max-w-4xl mx-auto mt-6 text-center text-sm text-gray-600 print:hidden">
+        <div className="max-w-4xl mx-auto mt-6 text-center text-sm text-gray-600 print-hide">
           <p>
             Click "Download PDF" to save your resume. For best results, use Chrome or Edge browser 
             and set margins to "Minimum" in print settings.
@@ -325,13 +351,23 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
       </div>
 
       {/* AI Assistant */}
-      <AIAssistant />
+      <div className="print-hide">
+        <AIAssistant />
+      </div>
+
+      {/* Save Resume Dialog */}
+      <SaveResumeDialog
+        open={saveDialogOpen}
+        onOpenChange={setSaveDialogOpen}
+        onSave={handleSave}
+        defaultTitle={resumeData.title || `${resumeData.personalInfo?.fullName || "My"} Resume`}
+      />
 
       {/* Print Styles */}
       <style>{`
         @media print {
           body { -webkit-print-color-adjust: exact; }
-          .print\\:hidden { display: none !important; }
+          .print-hide { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:max-w-none { max-width: none !important; }
           .print\\:p-6 { padding: 1.5rem !important; }

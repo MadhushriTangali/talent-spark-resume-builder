@@ -193,5 +193,5 @@ export const useResumeStorage = () => {
     updateResume,
     deleteResume,
     refreshResumes: fetchResumes
-  };
+  };  
 };
