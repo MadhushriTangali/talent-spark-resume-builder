@@ -3,12 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Eye, Sparkles, Target, CheckCircle, LogIn, User, FolderOpen } from "lucide-react";
+import { FileText, Download, Eye, Sparkles, Target, CheckCircle } from "lucide-react";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { ResumePreview } from "@/components/ResumePreview";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { KeywordAnalyzer } from "@/components/KeywordAnalyzer";
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<"home" | "build" | "preview">("home");
@@ -29,45 +27,6 @@ const Index = () => {
     certifications: []
   });
 
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-  };
-
-  const handleStartBuilding = () => {
-    console.log("Start Building clicked, user:", user);
-    if (user) {
-      navigate("/build");
-    } else {
-      navigate("/auth");
-    }
-  };
-
-  const handleGetStarted = () => {
-    console.log("Get Started clicked, user:", user);
-    if (user) {
-      navigate("/build");
-    } else {
-      navigate("/auth");
-    }
-  };
-
-  const handleViewTemplates = () => {
-    console.log("View Templates clicked");
-    navigate("/templates");
-  };
-
-  const handleMyResumes = () => {
-    console.log("My Resumes clicked, user:", user);
-    if (user) {
-      navigate("/my-resumes");
-    } else {
-      navigate("/auth");
-    }
-  };
-
   const features = [
     {
       icon: Target,
@@ -85,17 +44,6 @@ const Index = () => {
       description: "Live feedback on ATS-friendly formatting and structure"
     }
   ];
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (currentView === "build") {
     return (
@@ -132,51 +80,12 @@ const Index = () => {
                 ATS Resume Builder
               </h1>
             </div>
-            <div className="flex items-center space-x-3">
-              {user ? (
-                <>
-                  <Button 
-                    variant="outline"
-                    onClick={handleMyResumes}
-                    className="border-purple-200 text-purple-700 hover:bg-purple-50"
-                  >
-                    <FolderOpen className="h-4 w-4 mr-2" />
-                    My Resumes
-                  </Button>
-                  <Button 
-                    onClick={handleStartBuilding}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
-                  >
-                    Build Resume
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={handleSignOut}
-                    className="text-gray-600 hover:text-gray-700"
-                  >
-                    <User className="h-4 w-4 mr-2" />
-                    Sign Out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button 
-                    variant="outline"
-                    onClick={() => navigate("/auth")}
-                    className="border-purple-200 text-purple-700 hover:bg-purple-50"
-                  >
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                  <Button 
-                    onClick={handleGetStarted}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
-                  >
-                    Get Started
-                  </Button>
-                </>
-              )}
-            </div>
+            <Button 
+              onClick={() => setCurrentView("build")}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+            >
+              Build Resume
+            </Button>
           </div>
         </div>
       </header>
@@ -196,56 +105,22 @@ const Index = () => {
             keyword suggestions, and expert formatting guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {user ? (
-              <>
-                <Button 
-                  size="lg"
-                  onClick={handleStartBuilding}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
-                >
-                  <FileText className="mr-2 h-5 w-5" />
-                  Start Building
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  onClick={handleMyResumes}
-                  className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
-                >
-                  <FolderOpen className="mr-2 h-5 w-5" />
-                  My Resumes
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  onClick={handleViewTemplates}
-                  className="border-blue-200 text-blue-700 hover:bg-blue-50 px-8 py-3 text-lg"
-                >
-                  <Eye className="mr-2 h-5 w-5" />
-                  View Templates
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button 
-                  size="lg"
-                  onClick={handleGetStarted}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
-                >
-                  <FileText className="mr-2 h-5 w-5" />
-                  Start Building
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  onClick={handleViewTemplates}
-                  className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
-                >
-                  <Eye className="mr-2 h-5 w-5" />
-                  View Templates
-                </Button>
-              </>
-            )}
+            <Button 
+              size="lg"
+              onClick={() => setCurrentView("build")}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
+            >
+              <FileText className="mr-2 h-5 w-5" />
+              Start Building
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
+            >
+              <Eye className="mr-2 h-5 w-5" />
+              View Templates
+            </Button>
           </div>
         </div>
       </section>
@@ -351,7 +226,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg"
-            onClick={handleGetStarted}
+            onClick={() => setCurrentView("build")}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
           >
             <FileText className="mr-2 h-5 w-5" />
