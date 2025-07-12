@@ -1,18 +1,55 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Download, Edit, Mail, Phone, MapPin, Linkedin, Globe } from "lucide-react";
+import { ArrowLeft, Download, Edit, Mail, Phone, MapPin, Linkedin, Globe, Save } from "lucide-react";
+import { useResumeStorage } from "@/hooks/useResumeStorage";
+import { useToast } from "@/hooks/use-toast";
+import { AIAssistant } from "./AIAssistant";
 
 interface ResumePreviewProps {
   resumeData: any;
   onEdit: () => void;
   onBack: () => void;
+  resumeId?: string;
 }
 
-export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps) => {
+export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePreviewProps) => {
+  const { saveResume, updateResume } = useResumeStorage();
+  const { toast } = useToast();
+
   const handleDownload = () => {
-    // Create a printable version
     window.print();
+  };
+
+  const handleSave = async () => {
+    try {
+      if (resumeId) {
+        await updateResume(resumeId, resumeData);
+      } else {
+        await saveResume(resumeData);
+      }
+      toast({
+        title: "Success",
+        description: "Resume saved successfully!",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save resume. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const formatTechnologies = (technologies: string[]) => {
+    if (!technologies || technologies.length === 0) return '';
+    if (technologies.length === 1) return technologies[0];
+    return technologies.map((tech, index) => `${index + 1}. ${tech}`).join(' • ');
+  };
+
+  const formatListItems = (items: string[]) => {
+    if (!items || items.length === 0) return [];
+    return items.filter(item => item.trim());
   };
 
   return (
@@ -31,6 +68,13 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
               </h1>
             </div>
             <div className="flex items-center space-x-3">
+              <Button 
+                onClick={handleSave}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Save Resume
+              </Button>
               <Button 
                 variant="outline" 
                 onClick={onEdit}
@@ -108,7 +152,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
             {resumeData.experience && resumeData.experience.length > 0 && (
               <div className="mb-8 print:mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
-                  WORK EXPERIENCE
+                  PROFESSIONAL EXPERIENCE
                 </h2>
                 <div className="space-y-6">
                   {resumeData.experience.map((exp: any, index: number) => (
@@ -124,16 +168,16 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
                         </div>
                       </div>
                       <div className="ml-0">
-                        {exp.responsibilities && exp.responsibilities.length > 0 && exp.responsibilities[0] && (
+                        {exp.responsibilities && formatListItems(exp.responsibilities).length > 0 && (
                           <ul className="list-disc list-inside space-y-1 text-gray-700">
-                            {exp.responsibilities.filter((resp: string) => resp.trim()).map((resp: string, idx: number) => (
+                            {formatListItems(exp.responsibilities).map((resp: string, idx: number) => (
                               <li key={idx}>{resp}</li>
                             ))}
                           </ul>
                         )}
-                        {exp.achievements && exp.achievements.length > 0 && exp.achievements[0] && (
+                        {exp.achievements && formatListItems(exp.achievements).length > 0 && (
                           <ul className="list-disc list-inside space-y-1 text-gray-700 mt-2">
-                            {exp.achievements.filter((achievement: string) => achievement.trim()).map((achievement: string, idx: number) => (
+                            {formatListItems(exp.achievements).map((achievement: string, idx: number) => (
                               <li key={idx} className="font-medium">{achievement}</li>
                             ))}
                           </ul>
@@ -149,17 +193,17 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
             {resumeData.projects && resumeData.projects.length > 0 && (
               <div className="mb-8 print:mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
-                  PROJECTS
+                  KEY PROJECTS
                 </h2>
                 <div className="space-y-4">
                   {resumeData.projects.map((project: any, index: number) => (
                     <div key={index}>
                       <div className="flex justify-between items-start mb-2">
-                        <div>
+                        <div className="flex-1">
                           <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
                           {project.technologies && project.technologies.length > 0 && (
-                            <p className="text-sm text-purple-600 font-medium">
-                              Technologies: {project.technologies.join(", ")}
+                            <p className="text-sm text-purple-600 font-medium mt-1">
+                              <strong>Technologies:</strong> {formatTechnologies(project.technologies)}
                             </p>
                           )}
                         </div>
@@ -167,19 +211,29 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
                           <p>{project.startDate} - {project.current ? "Present" : project.endDate}</p>
                         </div>
                       </div>
-                      <p className="text-gray-700 mb-2">{project.description}</p>
-                      <div className="flex space-x-4 text-sm">
-                        {project.link && (
-                          <a href={project.link} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
-                            Live Demo
-                          </a>
-                        )}
-                        {project.github && (
-                          <a href={project.github} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
-                            GitHub
-                          </a>
+                      <div className="mb-3">
+                        {resumeData.projects.length >= 2 ? (
+                          <ul className="list-disc list-inside space-y-1 text-gray-700">
+                            <li>{project.description}</li>
+                          </ul>
+                        ) : (
+                          <p className="text-gray-700">{project.description}</p>
                         )}
                       </div>
+                      {(project.link || project.github) && (
+                        <div className="flex space-x-4 text-sm">
+                          {project.link && (
+                            <a href={project.link} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                              • Live Demo
+                            </a>
+                          )}
+                          {project.github && (
+                            <a href={project.github} className="text-purple-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                              • GitHub Repository
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -201,9 +255,9 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
                         </h3>
                         <p className="text-purple-600 font-medium">{edu.school}</p>
                         <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
-                          {edu.location && <span>{edu.location}</span>}
-                          {edu.gpa && <span>GPA: {edu.gpa}</span>}
-                          {edu.honors && <span className="font-medium text-yellow-700">{edu.honors}</span>}
+                          {edu.location && <span>• {edu.location}</span>}
+                          {edu.gpa && <span>• GPA: {edu.gpa}</span>}
+                          {edu.honors && <span className="font-medium text-yellow-700">• {edu.honors}</span>}
                         </div>
                       </div>
                       {edu.graduationDate && (
@@ -221,7 +275,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
             {resumeData.skills && resumeData.skills.length > 0 && (
               <div className="mb-8 print:mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
-                  SKILLS & EXPERTISE
+                  TECHNICAL SKILLS & EXPERTISE
                 </h2>
                 <div className="grid md:grid-cols-2 gap-4">
                   {["Technical", "Soft", "Industry", "Tools"].map((category) => {
@@ -231,16 +285,26 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
                     return (
                       <div key={category}>
                         <h3 className="font-semibold text-gray-900 mb-2">
-                          {category === "Technical" ? "Technical Skills" :
-                           category === "Soft" ? "Soft Skills" :
-                           category === "Industry" ? "Industry Knowledge" : "Tools & Software"}
+                          {category === "Technical" ? "• Technical Skills" :
+                           category === "Soft" ? "• Soft Skills" :
+                           category === "Industry" ? "• Industry Knowledge" : "• Tools & Software"}
                         </h3>
-                        <div className="flex flex-wrap gap-1">
-                          {categorySkills.map((skill: any, index: number) => (
-                            <span key={index} className="text-sm text-gray-700">
-                              {skill.name}{index < categorySkills.length - 1 ? "," : ""}&nbsp;
-                            </span>
-                          ))}
+                        <div className="ml-4">
+                          {categorySkills.length > 3 ? (
+                            <ul className="list-decimal list-inside space-y-1">
+                              {categorySkills.map((skill: any, index: number) => (
+                                <li key={index} className="text-sm text-gray-700">{skill.name}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <div className="flex flex-wrap gap-1">
+                              {categorySkills.map((skill: any, index: number) => (
+                                <span key={index} className="text-sm text-gray-700">
+                                  {skill.name}{index < categorySkills.length - 1 ? " • " : ""}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
@@ -259,6 +323,9 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
           </p>
         </div>
       </div>
+
+      {/* AI Assistant */}
+      <AIAssistant />
 
       {/* Print Styles */}
       <style>{`

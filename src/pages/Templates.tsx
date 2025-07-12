@@ -33,28 +33,139 @@ const Templates = () => {
       id: "modern",
       name: "Modern Professional",
       description: "Clean, modern design perfect for tech and creative industries",
-      preview: "/placeholder.svg",
+      preview: (
+        <div className="bg-white p-4 text-xs">
+          <div className="text-center mb-3">
+            <h1 className="text-lg font-bold text-gray-900">John Doe</h1>
+            <p className="text-gray-600">Software Engineer</p>
+            <div className="text-gray-500 text-xs">john@email.com • (555) 123-4567</div>
+          </div>
+          <div className="mb-3">
+            <h2 className="text-sm font-bold text-purple-600 border-b border-purple-200 pb-1 mb-2">EXPERIENCE</h2>
+            <div className="mb-2">
+              <h3 className="font-semibold">Senior Developer</h3>
+              <p className="text-purple-600 text-xs">Tech Company</p>
+              <ul className="list-disc list-inside text-xs text-gray-700 mt-1">
+                <li>Led development of web applications</li>
+                <li>Improved system performance by 40%</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mb-3">
+            <h2 className="text-sm font-bold text-purple-600 border-b border-purple-200 pb-1 mb-2">SKILLS</h2>
+            <div className="text-xs text-gray-700">
+              <p><strong>Technical:</strong> React, Node.js, Python</p>
+              <p><strong>Tools:</strong> Git, Docker, AWS</p>
+            </div>
+          </div>
+        </div>
+      ),
       features: ["ATS-Friendly", "Modern Design", "Easy to Customize"]
     },
     {
       id: "classic",
       name: "Classic Corporate",
       description: "Traditional format ideal for corporate and business roles",
-      preview: "/placeholder.svg",
+      preview: (
+        <div className="bg-white p-4 text-xs">
+          <div className="text-center mb-3">
+            <h1 className="text-lg font-bold text-gray-900">Jane Smith</h1>
+            <div className="text-gray-600 text-xs">jane@email.com | (555) 987-6543 | New York, NY</div>
+          </div>
+          <div className="mb-3">
+            <h2 className="text-sm font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2">PROFESSIONAL EXPERIENCE</h2>
+            <div className="mb-2">
+              <div className="flex justify-between">
+                <div>
+                  <h3 className="font-semibold">Marketing Manager</h3>
+                  <p className="text-gray-600 text-xs">ABC Corporation</p>
+                </div>
+                <div className="text-xs text-gray-600">2020-Present</div>
+              </div>
+              <ul className="list-disc list-inside text-xs text-gray-700 mt-1">
+                <li>Managed marketing campaigns</li>
+                <li>Increased brand awareness by 25%</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-gray-900 border-b-2 border-gray-300 pb-1 mb-2">EDUCATION</h2>
+            <div className="text-xs">
+              <h3 className="font-semibold">MBA in Marketing</h3>
+              <p className="text-gray-600">Business School - 2018</p>
+            </div>
+          </div>
+        </div>
+      ),
       features: ["ATS-Optimized", "Professional Layout", "Industry Standard"]
     },
     {
       id: "minimal",
       name: "Minimal Clean",
       description: "Minimalist design that highlights your achievements",
-      preview: "/placeholder.svg",
+      preview: (
+        <div className="bg-white p-4 text-xs">
+          <div className="mb-3">
+            <h1 className="text-xl font-light text-gray-900">Alex Johnson</h1>
+            <p className="text-gray-600 text-sm">UX Designer</p>
+            <div className="text-gray-500 text-xs mt-1">alex@email.com • Portfolio: alexdesign.com</div>
+          </div>
+          <div className="mb-3">
+            <h2 className="text-sm font-medium text-gray-900 mb-2">Experience</h2>
+            <div className="mb-2">
+              <h3 className="font-medium">UX Designer</h3>
+              <p className="text-gray-600 text-xs">Design Studio • 2021-Present</p>
+              <p className="text-xs text-gray-700 mt-1">Created user-centered designs for mobile apps</p>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-sm font-medium text-gray-900 mb-2">Skills</h2>
+            <p className="text-xs text-gray-700">Figma • Sketch • User Research • Prototyping</p>
+          </div>
+        </div>
+      ),
       features: ["Clean Design", "Focus on Content", "Versatile"]
     },
     {
       id: "creative",
       name: "Creative Edge",
       description: "Eye-catching design for creative professionals",
-      preview: "/placeholder.svg",
+      preview: (
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 text-xs">
+          <div className="mb-3">
+            <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Sarah Wilson
+            </h1>
+            <p className="text-purple-600 font-medium">Graphic Designer</p>
+            <div className="text-gray-600 text-xs">sarah@email.com • +1-555-0199</div>
+          </div>
+          <div className="mb-3">
+            <h2 className="text-sm font-bold text-blue-600 mb-2">Portfolio Highlights</h2>
+            <div className="mb-2">
+              <h3 className="font-semibold text-gray-900">Brand Identity Project</h3>
+              <p className="text-xs text-gray-700">Created complete brand identity for startup</p>
+              <div className="flex space-x-2 text-xs text-purple-600 mt-1">
+                <span>• Illustrator</span>
+                <span>• Photoshop</span>
+                <span>• InDesign</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-blue-600 mb-2">Creative Skills</h2>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <p className="font-medium">Design</p>
+                <p className="text-gray-700">Logo • Branding</p>
+              </div>
+              <div>
+                <p className="font-medium">Software</p>
+                <p className="text-gray-700">Adobe Creative Suite</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
       features: ["Creative Layout", "Visual Appeal", "Stand Out"]
     }
   ];
@@ -66,6 +177,11 @@ const Templates = () => {
     }
     // Navigate to builder with selected template
     navigate("/", { state: { templateId, startBuilding: true } });
+  };
+
+  const handlePreviewTemplate = (templateId: string) => {
+    // For demo purposes, show a preview of the selected template
+    alert(`Previewing ${templates.find(t => t.id === templateId)?.name} template`);
   };
 
   return (
@@ -116,12 +232,10 @@ const Templates = () => {
             <Card key={template.id} className="group hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border-0">
               <CardContent className="p-6">
                 {/* Template Preview */}
-                <div className="aspect-[3/4] bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                  <img 
-                    src={template.preview} 
-                    alt={template.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                <div className="aspect-[3/4] bg-gray-100 rounded-lg mb-4 overflow-hidden border">
+                  <div className="w-full h-full transform scale-90 origin-top-left">
+                    {template.preview}
+                  </div>
                 </div>
 
                 {/* Template Info */}
@@ -147,7 +261,11 @@ const Templates = () => {
                       <FileText className="h-4 w-4 mr-2" />
                       Use This Template
                     </Button>
-                    <Button variant="outline" className="border-purple-200 text-purple-700 hover:bg-purple-50">
+                    <Button 
+                      variant="outline" 
+                      className="border-purple-200 text-purple-700 hover:bg-purple-50"
+                      onClick={() => handlePreviewTemplate(template.id)}
+                    >
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>

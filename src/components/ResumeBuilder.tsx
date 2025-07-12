@@ -11,6 +11,7 @@ import { SkillsForm } from "./SkillsForm";
 import { SummaryForm } from "./SummaryForm";
 import { ProjectsForm } from "./ProjectsForm";
 import { ATSScoreCard } from "./ATSScoreCard";
+import { AIAssistant } from "./AIAssistant";
 import { useResumeStorage } from "@/hooks/useResumeStorage";
 import { useToast } from "@/hooks/use-toast";
 
@@ -91,6 +92,18 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack, re
     } catch (error) {
       console.error('Error saving resume:', error);
     }
+  };
+
+  const handleAISuggestion = (suggestion: string) => {
+    // Apply AI suggestion to current section
+    const section = sections[currentSection];
+    if (section.id === "summary") {
+      setResumeData({
+        ...resumeData,
+        summary: suggestion
+      });
+    }
+    // Add more section-specific handling as needed
   };
 
   const CurrentSectionComponent = sections[currentSection].component;
@@ -256,6 +269,9 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack, re
           </div>
         </div>
       </div>
+
+      {/* AI Assistant */}
+      <AIAssistant onSuggestionApply={handleAISuggestion} />
     </div>
   );
 };
