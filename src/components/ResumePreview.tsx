@@ -220,7 +220,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack }: ResumePreviewProps
       </div>
 
       {/* Print Styles */}
-      <style jsx global>{`
+      <style>{`
         @media print {
           body { -webkit-print-color-adjust: exact; }
           .print\\:hidden { display: none !important; }
