@@ -50,13 +50,20 @@ const EditResume = () => {
         }
 
         setResumeData({
-          personalInfo: data.personal_info,
-          summary: data.summary,
-          experience: data.experience,
-          education: data.education,
-          skills: data.skills,
-          projects: data.projects,
-          certifications: data.certifications
+          personalInfo: (data.personal_info as any) || {
+            fullName: "",
+            email: "",
+            phone: "",
+            location: "",
+            linkedIn: "",
+            website: ""
+          },
+          summary: data.summary || "",
+          experience: (data.experience as any[]) || [],
+          education: (data.education as any[]) || [],
+          skills: (data.skills as any[]) || [],
+          projects: (data.projects as any[]) || [],
+          certifications: (data.certifications as any[]) || []
         });
       } catch (error) {
         console.error('Error:', error);
