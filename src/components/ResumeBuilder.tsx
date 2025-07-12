@@ -1,15 +1,19 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Eye, Save, Download, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowLeft, Eye, Save, CheckCircle2 } from "lucide-react";
 import { PersonalInfoForm } from "./PersonalInfoForm";
 import { ExperienceForm } from "./ExperienceForm";
 import { EducationForm } from "./EducationForm";
 import { SkillsForm } from "./SkillsForm";
 import { SummaryForm } from "./SummaryForm";
 import { ATSScoreCard } from "./ATSScoreCard";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResumeBuilderProps {
   resumeData: any;
@@ -20,6 +24,16 @@ interface ResumeBuilderProps {
 
 export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: ResumeBuilderProps) => {
   const [currentSection, setCurrentSection] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+    }
+  }, [user, navigate]);
 
   const sections = [
     { id: "personal", title: "Personal Information", component: PersonalInfoForm, icon: "👤" },
@@ -28,6 +42,49 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
     { id: "education", title: "Education", component: EducationForm, icon: "🎓" },
     { id: "skills", title: "Skills & Expertise", component: SkillsForm, icon: "⚡" }
   ];
+
+  const saveResume = async () => {
+    if (!user) return;
+
+    setSaving(true);
+    try {
+      const resumeTitle = resumeData.personalInfo.fullName 
+        ? `${resumeData.personalInfo.fullName}'s Resume`
+        : 'My Resume';
+
+      const { error } = await supabase
+        .from('resumes')
+        .insert({
+          user_id: user.id,
+          title: resumeTitle,
+          personal_info: resumeData.personalInfo,
+          summary: resumeData.summary,
+          experience: resumeData.experience,
+          education: resumeData.education,
+          skills: resumeData.skills,
+          projects: resumeData.projects,
+          certifications: resumeData.certifications
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Resume Saved!",
+        description: "Your resume has been saved successfully.",
+      });
+    } catch (error) {
+      console.error('Error saving resume:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save resume. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const getCurrentSectionCompletion = () => {
     const section = sections[currentSection];
@@ -49,7 +106,6 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
 
   const getOverallCompletion = () => {
     const completedSections = sections.filter((_, index) => {
-      const oldSection = currentSection;
       const completion = sections.map((s, i) => {
         switch (s.id) {
           case "personal":
@@ -92,6 +148,15 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
               <Badge variant="secondary" className="bg-purple-100 text-purple-700">
                 {getOverallCompletion()}% Complete
               </Badge>
+              <Button
+                variant="outline"
+                onClick={saveResume}
+                disabled={saving}
+                className="border-green-200 text-green-700 hover:bg-green-50"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Saving..." : "Save"}
+              </Button>
               <Button 
                 variant="outline" 
                 onClick={onPreview}
