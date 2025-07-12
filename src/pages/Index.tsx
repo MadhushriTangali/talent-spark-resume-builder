@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,38 @@ const Index = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+  };
+
+  const handleStartBuilding = () => {
+    console.log("Start Building clicked, user:", user);
+    if (user) {
+      navigate("/build");
+    } else {
+      navigate("/auth");
+    }
+  };
+
+  const handleGetStarted = () => {
+    console.log("Get Started clicked, user:", user);
+    if (user) {
+      navigate("/build");
+    } else {
+      navigate("/auth");
+    }
+  };
+
+  const handleViewTemplates = () => {
+    console.log("View Templates clicked");
+    navigate("/templates");
+  };
+
+  const handleMyResumes = () => {
+    console.log("My Resumes clicked, user:", user);
+    if (user) {
+      navigate("/my-resumes");
+    } else {
+      navigate("/auth");
+    }
   };
 
   const features = [
@@ -104,14 +137,14 @@ const Index = () => {
                 <>
                   <Button 
                     variant="outline"
-                    onClick={() => navigate("/my-resumes")}
+                    onClick={handleMyResumes}
                     className="border-purple-200 text-purple-700 hover:bg-purple-50"
                   >
                     <FolderOpen className="h-4 w-4 mr-2" />
                     My Resumes
                   </Button>
                   <Button 
-                    onClick={() => navigate("/build")}
+                    onClick={handleStartBuilding}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                   >
                     Build Resume
@@ -136,7 +169,7 @@ const Index = () => {
                     Sign In
                   </Button>
                   <Button 
-                    onClick={() => navigate("/auth")}
+                    onClick={handleGetStarted}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                   >
                     Get Started
@@ -167,7 +200,7 @@ const Index = () => {
               <>
                 <Button 
                   size="lg"
-                  onClick={() => navigate("/build")}
+                  onClick={handleStartBuilding}
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
                 >
                   <FileText className="mr-2 h-5 w-5" />
@@ -176,7 +209,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => navigate("/my-resumes")}
+                  onClick={handleMyResumes}
                   className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
                 >
                   <FolderOpen className="mr-2 h-5 w-5" />
@@ -185,7 +218,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => navigate("/templates")}
+                  onClick={handleViewTemplates}
                   className="border-blue-200 text-blue-700 hover:bg-blue-50 px-8 py-3 text-lg"
                 >
                   <Eye className="mr-2 h-5 w-5" />
@@ -196,7 +229,7 @@ const Index = () => {
               <>
                 <Button 
                   size="lg"
-                  onClick={() => navigate("/auth")}
+                  onClick={handleGetStarted}
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
                 >
                   <FileText className="mr-2 h-5 w-5" />
@@ -205,7 +238,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => navigate("/templates")}
+                  onClick={handleViewTemplates}
                   className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
                 >
                   <Eye className="mr-2 h-5 w-5" />
@@ -318,7 +351,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg"
-            onClick={() => user ? navigate("/build") : navigate("/auth")}
+            onClick={handleGetStarted}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
           >
             <FileText className="mr-2 h-5 w-5" />
