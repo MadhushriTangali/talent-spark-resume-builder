@@ -1,15 +1,23 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Download, Eye, Sparkles, Target, CheckCircle } from "lucide-react";
+import { FileText, Download, Eye, Sparkles, Target, CheckCircle, LogOut } from "lucide-react";
 import { ResumeBuilder } from "@/components/ResumeBuilder";
 import { ResumePreview } from "@/components/ResumePreview";
 import { KeywordAnalyzer } from "@/components/KeywordAnalyzer";
+import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
   const [currentView, setCurrentView] = useState<"home" | "build" | "preview">("home");
+  const [user, setUser] = useState<User | null>(null);
   const [resumeData, setResumeData] = useState({
     personalInfo: {
       fullName: "",
@@ -26,6 +34,58 @@ const Index = () => {
     projects: [],
     certifications: []
   });
+
+  useEffect(() => {
+    // Get current user
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      if (event === 'SIGNED_IN') {
+        toast({
+          title: "Welcome!",
+          description: "You have successfully signed in.",
+        });
+      }
+    });
+
+    // Check if we should start building (from templates page)
+    if (location.state?.startBuilding) {
+      setCurrentView("build");
+    }
+
+    return () => subscription.unsubscribe();
+  }, [location.state, toast]);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+    }
+  };
+
+  const handleStartBuilding = () => {
+    console.log("Start Building clicked, user:", user);
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    setCurrentView("build");
+  };
 
   const features = [
     {
@@ -80,12 +140,34 @@ const Index = () => {
                 ATS Resume Builder
               </h1>
             </div>
-            <Button 
-              onClick={() => setCurrentView("build")}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
-            >
-              Build Resume
-            </Button>
+            <div className="flex items-center space-x-3">
+              {user ? (
+                <>
+                  <span className="text-sm text-gray-600">Welcome, {user.email}</span>
+                  <Button 
+                    onClick={handleStartBuilding}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                  >
+                    Build Resume
+                  </Button>
+                  <Button variant="ghost" onClick={handleSignOut} className="text-gray-600 hover:text-gray-700">
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" onClick={() => navigate("/auth")} className="text-purple-600 hover:text-purple-700">
+                    Sign In
+                  </Button>
+                  <Button 
+                    onClick={() => navigate("/auth")}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                  >
+                    Get Started
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -107,7 +189,7 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
-              onClick={() => setCurrentView("build")}
+              onClick={handleStartBuilding}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
             >
               <FileText className="mr-2 h-5 w-5" />
@@ -116,6 +198,7 @@ const Index = () => {
             <Button 
               size="lg" 
               variant="outline"
+              onClick={() => navigate("/templates")}
               className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
             >
               <Eye className="mr-2 h-5 w-5" />
@@ -226,7 +309,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg"
-            onClick={() => setCurrentView("build")}
+            onClick={handleStartBuilding}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
           >
             <FileText className="mr-2 h-5 w-5" />
