@@ -59,11 +59,11 @@ const EditResume = () => {
             website: ""
           },
           summary: data.summary || "",
-          experience: (data.experience as any[]) || [],
-          education: (data.education as any[]) || [],
-          skills: (data.skills as any[]) || [],
-          projects: (data.projects as any[]) || [],
-          certifications: (data.certifications as any[]) || []
+          experience: Array.isArray(data.experience) ? data.experience : [],
+          education: Array.isArray(data.education) ? data.education : [],
+          skills: Array.isArray(data.skills) ? data.skills : [],
+          projects: Array.isArray(data.projects) ? data.projects : [],
+          certifications: Array.isArray(data.certifications) ? data.certifications : []
         });
       } catch (error) {
         console.error('Error:', error);
