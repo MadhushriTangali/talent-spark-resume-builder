@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,9 +19,10 @@ interface ResumeBuilderProps {
   setResumeData: (data: any) => void;
   onPreview: () => void;
   onBack: () => void;
+  resumeId?: string;
 }
 
-export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: ResumeBuilderProps) => {
+export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack, resumeId }: ResumeBuilderProps) => {
   const [currentSection, setCurrentSection] = useState(0);
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
@@ -52,22 +52,45 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
         ? `${resumeData.personalInfo.fullName}'s Resume`
         : 'My Resume';
 
-      const { error } = await supabase
-        .from('resumes')
-        .insert({
-          user_id: user.id,
-          title: resumeTitle,
-          personal_info: resumeData.personalInfo,
-          summary: resumeData.summary,
-          experience: resumeData.experience,
-          education: resumeData.education,
-          skills: resumeData.skills,
-          projects: resumeData.projects,
-          certifications: resumeData.certifications
-        });
+      if (resumeId) {
+        // Update existing resume
+        const { error } = await supabase
+          .from('resumes')
+          .update({
+            title: resumeTitle,
+            personal_info: resumeData.personalInfo,
+            summary: resumeData.summary,
+            experience: resumeData.experience,
+            education: resumeData.education,
+            skills: resumeData.skills,
+            projects: resumeData.projects,
+            certifications: resumeData.certifications,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', resumeId);
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+      } else {
+        // Create new resume
+        const { error } = await supabase
+          .from('resumes')
+          .insert({
+            user_id: user.id,
+            title: resumeTitle,
+            personal_info: resumeData.personalInfo,
+            summary: resumeData.summary,
+            experience: resumeData.experience,
+            education: resumeData.education,
+            skills: resumeData.skills,
+            projects: resumeData.projects,
+            certifications: resumeData.certifications
+          });
+
+        if (error) {
+          throw error;
+        }
       }
 
       toast({
@@ -141,7 +164,7 @@ export const ResumeBuilder = ({ resumeData, setResumeData, onPreview, onBack }: 
                 Back
               </Button>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Resume Builder
+                {resumeId ? 'Edit Resume' : 'Resume Builder'}
               </h1>
             </div>
             <div className="flex items-center space-x-3">

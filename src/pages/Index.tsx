@@ -111,7 +111,7 @@ const Index = () => {
                     My Resumes
                   </Button>
                   <Button 
-                    onClick={() => setCurrentView("build")}
+                    onClick={() => navigate("/build")}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                   >
                     Build Resume
@@ -167,7 +167,7 @@ const Index = () => {
               <>
                 <Button 
                   size="lg"
-                  onClick={() => setCurrentView("build")}
+                  onClick={() => navigate("/build")}
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
                 >
                   <FileText className="mr-2 h-5 w-5" />
@@ -181,6 +181,15 @@ const Index = () => {
                 >
                   <FolderOpen className="mr-2 h-5 w-5" />
                   My Resumes
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => navigate("/templates")}
+                  className="border-blue-200 text-blue-700 hover:bg-blue-50 px-8 py-3 text-lg"
+                >
+                  <Eye className="mr-2 h-5 w-5" />
+                  View Templates
                 </Button>
               </>
             ) : (
@@ -196,7 +205,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={() => setCurrentView("preview")}
+                  onClick={() => navigate("/templates")}
                   className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
                 >
                   <Eye className="mr-2 h-5 w-5" />
@@ -309,7 +318,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg"
-            onClick={() => setCurrentView("build")}
+            onClick={() => user ? navigate("/build") : navigate("/auth")}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
           >
             <FileText className="mr-2 h-5 w-5" />

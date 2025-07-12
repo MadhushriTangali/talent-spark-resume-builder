@@ -8,6 +8,10 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import MyResumes from "./pages/MyResumes";
 import NotFound from "./pages/NotFound";
+import BuildResume from "./pages/BuildResume";
+import PreviewResume from "./pages/PreviewResume";
+import EditResume from "./pages/EditResume";
+import Templates from "./pages/Templates";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +25,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/my-resumes" element={<MyResumes />} />
+          <Route path="/build" element={<BuildResume />} />
+          <Route path="/templates" element={<Templates />} />
+          <Route path="/preview/:id" element={<PreviewResume />} />
+          <Route path="/edit/:id" element={<EditResume />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
