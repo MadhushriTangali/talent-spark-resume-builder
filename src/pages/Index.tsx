@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,14 @@ const Index = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+  };
+
+  const handleBuildResume = () => {
+    if (user) {
+      navigate("/build");
+    } else {
+      navigate("/auth");
+    }
   };
 
   const features = [
@@ -111,7 +120,7 @@ const Index = () => {
                     My Resumes
                   </Button>
                   <Button 
-                    onClick={() => navigate("/build")}
+                    onClick={handleBuildResume}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                   >
                     Build Resume
@@ -167,7 +176,7 @@ const Index = () => {
               <>
                 <Button 
                   size="lg"
-                  onClick={() => navigate("/build")}
+                  onClick={handleBuildResume}
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
                 >
                   <FileText className="mr-2 h-5 w-5" />
@@ -318,7 +327,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg"
-            onClick={() => user ? navigate("/build") : navigate("/auth")}
+            onClick={handleBuildResume}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 text-lg"
           >
             <FileText className="mr-2 h-5 w-5" />

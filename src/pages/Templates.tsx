@@ -5,10 +5,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ResumePreview } from "@/components/ResumePreview";
+import { useAuth } from "@/hooks/useAuth";
 
 const Templates = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
+  const handleUseTemplate = (templateData: any) => {
+    if (!user) {
+      // If user is not authenticated, redirect to auth page
+      navigate('/auth');
+      return;
+    }
+    // Navigate to build page with template data
+    navigate('/build', { state: { templateData } });
+  };
 
   const templates = [
     {
@@ -183,10 +195,7 @@ const Templates = () => {
       return (
         <ResumePreview 
           resumeData={template.sampleData}
-          onEdit={() => {
-            // Navigate to build page with this template data
-            navigate('/build', { state: { templateData: template.sampleData } });
-          }}
+          onEdit={() => handleUseTemplate(template.sampleData)}
           onBack={() => setSelectedTemplate(null)}
         />
       );
@@ -242,7 +251,7 @@ const Templates = () => {
                     Preview Template
                   </Button>
                   <Button
-                    onClick={() => navigate('/build', { state: { templateData: template.sampleData } })}
+                    onClick={() => handleUseTemplate(template.sampleData)}
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                   >
                     Use This Template
