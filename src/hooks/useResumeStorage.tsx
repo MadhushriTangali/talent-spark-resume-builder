@@ -58,7 +58,7 @@ export const useResumeStorage = () => {
       const resumeToSave = {
         user_id: user.id,
         title: title || resumeData.title || 'Untitled Resume',
-        template_id: resumeData.template_id || 'modern',
+        template_id: resumeData.templateId || resumeData.template_id || 'modern',
         personal_info: resumeData.personalInfo || {},
         summary: resumeData.summary || '',
         experience: resumeData.experience || [],
@@ -105,7 +105,7 @@ export const useResumeStorage = () => {
 
       const resumeToUpdate = {
         title: resumeData.title || 'Untitled Resume',
-        template_id: resumeData.template_id || 'modern',
+        template_id: resumeData.templateId || resumeData.template_id || 'modern',
         personal_info: resumeData.personalInfo || {},
         summary: resumeData.summary || '',
         experience: resumeData.experience || [],

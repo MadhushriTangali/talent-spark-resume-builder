@@ -163,8 +163,6 @@ const Index = () => {
               {user && (
                 <Button variant="ghost" onClick={() => navigate("/my-resumes")}>My Resumes</Button>
               )}
-              <Button variant="ghost">Features</Button>
-              <Button variant="ghost">Pricing</Button>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -218,15 +216,15 @@ const Index = () => {
               <FileText className="mr-2 h-5 w-5" />
               Start Building Now
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              onClick={() => navigate("/templates")}
-              className="border-purple-200 text-purple-700 hover:bg-purple-50 px-8 py-3 text-lg"
-            >
-              <Eye className="mr-2 h-5 w-5" />
-              View Templates
-            </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={() => navigate("/templates")}
+                className="bg-purple-600 text-white hover:bg-purple-700 px-8 py-3 text-lg"
+              >
+                <Eye className="mr-2 h-5 w-5" />
+                Browse Templates
+              </Button>
           </div>
         </div>
       </section>
@@ -299,7 +297,7 @@ const Index = () => {
                 size="lg" 
                 variant="outline" 
                 onClick={() => navigate("/templates")}
-                className="border-white text-white hover:bg-white/10 px-8 py-3 text-lg"
+                className="bg-purple-600 text-white hover:bg-purple-700 px-8 py-3 text-lg"
               >
                 Browse Templates
               </Button>

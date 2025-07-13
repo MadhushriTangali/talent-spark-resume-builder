@@ -83,14 +83,38 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
     
     switch (templateId) {
       case 'classic':
-        return 'font-serif';
+        return {
+          container: 'font-serif bg-white',
+          headerStyle: 'text-center border-b-2 border-gray-800 pb-4',
+          sectionTitle: 'text-lg font-bold text-gray-900 border-b-2 border-gray-800 pb-1 mb-3 uppercase tracking-wide',
+          nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
+          contactStyle: 'text-gray-700 text-sm'
+        };
       case 'minimal':
-        return 'font-light';
+        return {
+          container: 'font-light bg-white',
+          headerStyle: 'mb-8',
+          sectionTitle: 'text-lg font-light text-gray-800 mb-3 uppercase tracking-widest',
+          nameStyle: 'text-5xl font-thin text-gray-900 mb-2',
+          contactStyle: 'text-gray-600 text-sm font-light'
+        };
       case 'creative':
-        return 'bg-gradient-to-br from-blue-50 to-purple-50';
+        return {
+          container: 'bg-gradient-to-br from-blue-50 to-purple-50 font-sans',
+          headerStyle: 'text-center mb-8',
+          sectionTitle: 'text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 uppercase',
+          nameStyle: 'text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2',
+          contactStyle: 'text-gray-700 text-sm'
+        };
       case 'modern':
       default:
-        return 'font-sans';
+        return {
+          container: 'font-sans bg-white',
+          headerStyle: 'text-center mb-8',
+          sectionTitle: 'text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1',
+          nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
+          contactStyle: 'text-gray-700 text-base'
+        };
     }
   };
 
@@ -139,14 +163,14 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
 
       <div className="container mx-auto px-4 py-8">
         {/* Resume Preview */}
-        <Card id="resume-content" className={`max-w-4xl mx-auto bg-white shadow-2xl print:shadow-none print:max-w-none ${getTemplateStyles()}`}>
+        <Card id="resume-content" className={`max-w-4xl mx-auto shadow-2xl print:shadow-none print:max-w-none ${getTemplateStyles().container}`}>
           <CardContent className="p-8 print:p-6">
             {/* Header Section */}
-            <div className="text-center mb-8 print:mb-6">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2 print:text-3xl">
+            <div className={`${getTemplateStyles().headerStyle} print:mb-6`}>
+              <h1 className={`${getTemplateStyles().nameStyle} print:text-3xl`}>
                 {resumeData.personalInfo?.fullName || "Your Name"}
               </h1>
-              <div className="flex flex-wrap justify-center items-center gap-4 text-gray-600 text-sm">
+              <div className={`flex flex-wrap justify-center items-center gap-4 ${getTemplateStyles().contactStyle}`}>
                 {resumeData.personalInfo?.email && (
                   <div className="flex items-center space-x-1">
                     <Mail className="h-4 w-4" />
@@ -183,17 +207,17 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
             {/* Professional Summary */}
             {resumeData.summary && (
               <div className="mb-8 print:mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-3 border-b-2 border-purple-200 pb-1">
+                <h2 className={getTemplateStyles().sectionTitle}>
                   PROFESSIONAL SUMMARY
                 </h2>
-                <p className="text-gray-700 leading-relaxed">{resumeData.summary}</p>
+                <p className="text-gray-800 leading-relaxed text-base">{resumeData.summary}</p>
               </div>
             )}
 
             {/* Work Experience */}
             {resumeData.experience && resumeData.experience.length > 0 && (
               <div className="mb-8 print:mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
+                <h2 className={getTemplateStyles().sectionTitle}>
                   PROFESSIONAL EXPERIENCE
                 </h2>
                 <div className="space-y-6">
@@ -211,14 +235,14 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                       </div>
                       <div className="ml-0">
                         {exp.responsibilities && formatListItems(exp.responsibilities).length > 0 && (
-                          <ul className="list-disc list-inside space-y-1 text-gray-700">
+                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base">
                             {formatListItems(exp.responsibilities).map((resp: string, idx: number) => (
                               <li key={idx}>{resp}</li>
                             ))}
                           </ul>
                         )}
                         {exp.achievements && formatListItems(exp.achievements).length > 0 && (
-                          <ul className="list-disc list-inside space-y-1 text-gray-700 mt-2">
+                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base mt-2">
                             {formatListItems(exp.achievements).map((achievement: string, idx: number) => (
                               <li key={idx} className="font-medium">{achievement}</li>
                             ))}
@@ -234,7 +258,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
             {/* Projects */}
             {resumeData.projects && resumeData.projects.length > 0 && (
               <div className="mb-8 print:mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
+                <h2 className={getTemplateStyles().sectionTitle}>
                   KEY PROJECTS
                 </h2>
                 <div className="space-y-4">
@@ -255,11 +279,11 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                       </div>
                       <div className="mb-3">
                         {resumeData.projects.length >= 2 ? (
-                          <ul className="list-disc list-inside space-y-1 text-gray-700">
+                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base">
                             <li>{project.description}</li>
                           </ul>
                         ) : (
-                          <p className="text-gray-700">{project.description}</p>
+                          <p className="text-gray-800 text-base">{project.description}</p>
                         )}
                       </div>
                       {(project.link || project.github) && (
@@ -285,7 +309,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
             {/* Education */}
             {resumeData.education && resumeData.education.length > 0 && (
               <div className="mb-8 print:mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
+                <h2 className={getTemplateStyles().sectionTitle}>
                   EDUCATION
                 </h2>
                 <div className="space-y-4">
@@ -316,41 +340,23 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
             {/* Skills */}
             {resumeData.skills && resumeData.skills.length > 0 && (
               <div className="mb-8 print:mb-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1">
-                  TECHNICAL SKILLS & EXPERTISE
+                <h2 className={getTemplateStyles().sectionTitle}>
+                  SKILLS
                 </h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {["Technical", "Soft", "Industry", "Tools"].map((category) => {
-                    const categorySkills = resumeData.skills.filter((skill: any) => skill.category === category);
-                    if (categorySkills.length === 0) return null;
-                    
-                    return (
-                      <div key={category}>
-                        <h3 className="font-semibold text-gray-900 mb-2">
-                          {category === "Technical" ? "• Technical Skills" :
-                           category === "Soft" ? "• Soft Skills" :
-                           category === "Industry" ? "• Industry Knowledge" : "• Tools & Software"}
-                        </h3>
-                        <div className="ml-4">
-                          {categorySkills.length > 3 ? (
-                            <ul className="list-decimal list-inside space-y-1">
-                              {categorySkills.map((skill: any, index: number) => (
-                                <li key={index} className="text-sm text-gray-700">{skill.name}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <div className="flex flex-wrap gap-1">
-                              {categorySkills.map((skill: any, index: number) => (
-                                <span key={index} className="text-sm text-gray-700">
-                                  {skill.name}{index < categorySkills.length - 1 ? " • " : ""}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="space-y-2">
+                  {resumeData.skills.length > 5 ? (
+                    <ul className="list-decimal list-inside space-y-1 text-base text-gray-800">
+                      {resumeData.skills.map((skill: any, index: number) => (
+                        <li key={index}>{skill.name}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <ul className="list-disc list-inside space-y-1 text-base text-gray-800">
+                      {resumeData.skills.map((skill: any, index: number) => (
+                        <li key={index}>{skill.name}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             )}
