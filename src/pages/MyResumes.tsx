@@ -44,7 +44,7 @@ const MyResumes = () => {
       skills: resume.skills || [],
       projects: resume.projects || [],
       certifications: resume.certifications || [],
-      template_id: resume.template_id || 'modern',
+      templateId: resume.template_id || 'modern',
       title: resume.title
     };
 
@@ -65,7 +65,8 @@ const MyResumes = () => {
       education: resume.education || [],
       skills: resume.skills || [],
       projects: resume.projects || [],
-      certifications: resume.certifications || []
+      certifications: resume.certifications || [],
+      templateId: resume.template_id || 'modern'
     };
 
     navigate("/", { 

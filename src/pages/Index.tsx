@@ -52,18 +52,19 @@ const Index = () => {
       const { startBuilding, resumeData: stateResumeData, resumeId: stateResumeId, showPreview, templateId } = location.state;
       
       if (stateResumeData) {
-        setResumeData(stateResumeData);
-      }
-      
-      if (stateResumeId) {
-        setResumeId(stateResumeId);
-      }
-      
-      if (templateId) {
+        setResumeData({
+          ...stateResumeData,
+          templateId: templateId || stateResumeData.templateId || 'modern'
+        });
+      } else if (templateId) {
         setResumeData(prev => ({
           ...prev,
           templateId: templateId
         }));
+      }
+      
+      if (stateResumeId) {
+        setResumeId(stateResumeId);
       }
       
       if (startBuilding) {
