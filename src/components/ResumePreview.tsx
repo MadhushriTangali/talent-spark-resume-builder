@@ -78,6 +78,22 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
     return items.filter(item => item.trim());
   };
 
+  const getTemplateStyles = () => {
+    const templateId = resumeData.templateId || 'modern';
+    
+    switch (templateId) {
+      case 'classic':
+        return 'font-serif';
+      case 'minimal':
+        return 'font-light';
+      case 'creative':
+        return 'bg-gradient-to-br from-blue-50 to-purple-50';
+      case 'modern':
+      default:
+        return 'font-sans';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Header */}
@@ -123,7 +139,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
 
       <div className="container mx-auto px-4 py-8">
         {/* Resume Preview */}
-        <Card id="resume-content" className="max-w-4xl mx-auto bg-white shadow-2xl print:shadow-none print:max-w-none">
+        <Card id="resume-content" className={`max-w-4xl mx-auto bg-white shadow-2xl print:shadow-none print:max-w-none ${getTemplateStyles()}`}>
           <CardContent className="p-8 print:p-6">
             {/* Header Section */}
             <div className="text-center mb-8 print:mb-6">
@@ -282,7 +298,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                         <p className="text-purple-600 font-medium">{edu.school}</p>
                         <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                           {edu.location && <span>• {edu.location}</span>}
-                          {edu.gpa && <span>• GPA: {edu.gpa}</span>}
+                          {edu.gpa && <span>• {edu.gradeType || 'GPA'}: {edu.gpa}</span>}
                           {edu.honors && <span className="font-medium text-yellow-700">• {edu.honors}</span>}
                         </div>
                       </div>

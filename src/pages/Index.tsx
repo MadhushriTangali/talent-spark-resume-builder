@@ -49,7 +49,7 @@ const Index = () => {
 
   useEffect(() => {
     if (location.state) {
-      const { startBuilding, resumeData: stateResumeData, resumeId: stateResumeId, showPreview } = location.state;
+      const { startBuilding, resumeData: stateResumeData, resumeId: stateResumeId, showPreview, templateId } = location.state;
       
       if (stateResumeData) {
         setResumeData(stateResumeData);
@@ -57,6 +57,13 @@ const Index = () => {
       
       if (stateResumeId) {
         setResumeId(stateResumeId);
+      }
+      
+      if (templateId) {
+        setResumeData(prev => ({
+          ...prev,
+          templateId: templateId
+        }));
       }
       
       if (startBuilding) {

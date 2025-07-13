@@ -247,7 +247,12 @@ export const SkillsForm = ({ resumeData, setResumeData }: SkillsFormProps) => {
                         className={`cursor-pointer hover:bg-purple-50 hover:border-purple-300 text-gray-700 ${
                           alreadyAdded ? "opacity-50 cursor-not-allowed" : ""
                         }`}
-                        onClick={() => !alreadyAdded && addSkill(skill)}
+                        onClick={() => {
+                          if (!alreadyAdded) {
+                            setSelectedCategory(category.id);
+                            addSkill(skill);
+                          }
+                        }}
                       >
                         {alreadyAdded ? "✓ " : "+ "}{skill}
                       </Badge>

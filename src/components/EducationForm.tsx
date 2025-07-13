@@ -20,6 +20,7 @@ export const EducationForm = ({ resumeData, setResumeData }: EducationFormProps)
     major: "",
     graduationDate: "",
     gpa: "",
+    gradeType: "GPA",
     location: "",
     honors: ""
   });
@@ -51,6 +52,7 @@ export const EducationForm = ({ resumeData, setResumeData }: EducationFormProps)
       major: "",
       graduationDate: "",
       gpa: "",
+      gradeType: "GPA",
       location: "",
       honors: ""
     });
@@ -102,7 +104,7 @@ export const EducationForm = ({ resumeData, setResumeData }: EducationFormProps)
                     <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                       {edu.location && <span>{edu.location}</span>}
                       {edu.graduationDate && <span>Graduated: {edu.graduationDate}</span>}
-                      {edu.gpa && <span>GPA: {edu.gpa}</span>}
+                      {edu.gpa && <span>{edu.gradeType || 'GPA'}: {edu.gpa}</span>}
                     </div>
                     {edu.honors && (
                       <p className="text-sm font-medium text-yellow-700 mt-1">{edu.honors}</p>
@@ -186,12 +188,28 @@ export const EducationForm = ({ resumeData, setResumeData }: EducationFormProps)
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="gpa">GPA (optional)</Label>
+              <Label htmlFor="gradeType">Grade Type</Label>
+              <Select 
+                value={currentEducation.gradeType} 
+                onValueChange={(value) => setCurrentEducation({...currentEducation, gradeType: value})}
+              >
+                <SelectTrigger className="border-purple-200 focus:border-purple-500">
+                  <SelectValue placeholder="Select grade type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="GPA">GPA</SelectItem>
+                  <SelectItem value="CGPA">CGPA</SelectItem>
+                  <SelectItem value="Percentage">Percentage</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gpa">{currentEducation.gradeType || 'GPA'} (optional)</Label>
               <Input
                 id="gpa"
-                placeholder="3.8"
+                placeholder={currentEducation.gradeType === 'Percentage' ? '85%' : '3.8'}
                 value={currentEducation.gpa}
                 onChange={(e) => setCurrentEducation({...currentEducation, gpa: e.target.value})}
                 className="border-purple-200 focus:border-purple-500"
