@@ -85,26 +85,35 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
       case 'classic':
         return {
           container: 'font-serif bg-white',
-          headerStyle: 'text-center border-b-2 border-gray-800 pb-4',
+          headerStyle: 'text-center border-b-2 border-gray-800 pb-4 mb-6',
           sectionTitle: 'text-lg font-bold text-gray-900 border-b-2 border-gray-800 pb-1 mb-3 uppercase tracking-wide',
           nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
-          contactStyle: 'text-gray-700 text-sm'
+          contactStyle: 'text-gray-700 text-sm space-y-1',
+          contentStyle: 'text-gray-800 text-sm leading-relaxed',
+          experienceStyle: 'border-l-2 border-gray-300 pl-4 ml-2',
+          layout: 'single-column'
         };
       case 'minimal':
         return {
           container: 'font-light bg-white',
-          headerStyle: 'mb-8',
+          headerStyle: 'mb-8 text-left',
           sectionTitle: 'text-lg font-light text-gray-800 mb-3 uppercase tracking-widest',
           nameStyle: 'text-5xl font-thin text-gray-900 mb-2',
-          contactStyle: 'text-gray-600 text-sm font-light'
+          contactStyle: 'text-gray-600 text-sm font-light flex flex-wrap gap-4',
+          contentStyle: 'text-gray-700 text-sm leading-loose font-light',
+          experienceStyle: 'space-y-4',
+          layout: 'single-column'
         };
       case 'creative':
         return {
           container: 'bg-gradient-to-br from-blue-50 to-purple-50 font-sans',
-          headerStyle: 'text-center mb-8',
+          headerStyle: 'text-center mb-8 p-6 bg-white/50 rounded-lg',
           sectionTitle: 'text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 uppercase',
           nameStyle: 'text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2',
-          contactStyle: 'text-gray-700 text-sm'
+          contactStyle: 'text-gray-700 text-sm flex flex-wrap justify-center gap-3',
+          contentStyle: 'text-gray-800 text-sm leading-relaxed',
+          experienceStyle: 'bg-white/30 p-4 rounded-lg shadow-sm space-y-3',
+          layout: 'two-column'
         };
       case 'modern':
       default:
@@ -113,7 +122,10 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
           headerStyle: 'text-center mb-8',
           sectionTitle: 'text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1',
           nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
-          contactStyle: 'text-gray-700 text-base'
+          contactStyle: 'text-gray-700 text-base flex flex-wrap justify-center gap-4',
+          contentStyle: 'text-gray-800 text-base leading-relaxed',
+          experienceStyle: 'space-y-4',
+          layout: 'single-column'
         };
     }
   };
@@ -170,7 +182,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
               <h1 className={`${getTemplateStyles().nameStyle} print:text-3xl`}>
                 {resumeData.personalInfo?.fullName || "Your Name"}
               </h1>
-              <div className={`flex flex-wrap justify-center items-center gap-4 ${getTemplateStyles().contactStyle}`}>
+              <div className={getTemplateStyles().contactStyle}>
                 {resumeData.personalInfo?.email && (
                   <div className="flex items-center space-x-1">
                     <Mail className="h-4 w-4" />
@@ -210,7 +222,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 <h2 className={getTemplateStyles().sectionTitle}>
                   PROFESSIONAL SUMMARY
                 </h2>
-                <p className="text-gray-800 leading-relaxed text-base">{resumeData.summary}</p>
+                <p className={getTemplateStyles().contentStyle}>{resumeData.summary}</p>
               </div>
             )}
 
@@ -220,29 +232,29 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 <h2 className={getTemplateStyles().sectionTitle}>
                   PROFESSIONAL EXPERIENCE
                 </h2>
-                <div className="space-y-6">
+                <div className={getTemplateStyles().experienceStyle}>
                   {resumeData.experience.map((exp: any, index: number) => (
-                    <div key={index}>
+                    <div key={index} className="mb-6">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900">{exp.jobTitle}</h3>
+                          <h3 className={`text-lg font-semibold ${getTemplateStyles().contentStyle}`}>{exp.jobTitle}</h3>
                           <p className="text-purple-600 font-medium">{exp.company}</p>
                         </div>
-                        <div className="text-right text-sm text-gray-600">
+                        <div className={`text-right text-sm ${getTemplateStyles().contentStyle}`}>
                           <p>{exp.startDate} - {exp.current ? "Present" : exp.endDate}</p>
                           {exp.location && <p>{exp.location}</p>}
                         </div>
                       </div>
                       <div className="ml-0">
                         {exp.responsibilities && formatListItems(exp.responsibilities).length > 0 && (
-                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base">
+                          <ul className={`list-disc list-inside space-y-1 ${getTemplateStyles().contentStyle}`}>
                             {formatListItems(exp.responsibilities).map((resp: string, idx: number) => (
                               <li key={idx}>{resp}</li>
                             ))}
                           </ul>
                         )}
                         {exp.achievements && formatListItems(exp.achievements).length > 0 && (
-                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base mt-2">
+                          <ul className={`list-disc list-inside space-y-1 ${getTemplateStyles().contentStyle} mt-2`}>
                             {formatListItems(exp.achievements).map((achievement: string, idx: number) => (
                               <li key={idx} className="font-medium">{achievement}</li>
                             ))}
@@ -263,27 +275,27 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 </h2>
                 <div className="space-y-4">
                   {resumeData.projects.map((project: any, index: number) => (
-                    <div key={index}>
+                    <div key={index} className={resumeData.templateId === 'creative' ? 'bg-white/30 p-4 rounded-lg' : ''}>
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
+                          <h3 className={`text-lg font-semibold ${getTemplateStyles().contentStyle}`}>{project.name}</h3>
                           {project.technologies && project.technologies.length > 0 && (
                             <p className="text-sm text-purple-600 font-medium mt-1">
                               <strong>Technologies:</strong> {formatTechnologies(project.technologies)}
                             </p>
                           )}
                         </div>
-                        <div className="text-right text-sm text-gray-600">
+                        <div className={`text-right text-sm ${getTemplateStyles().contentStyle}`}>
                           <p>{project.startDate} - {project.current ? "Present" : project.endDate}</p>
                         </div>
                       </div>
                       <div className="mb-3">
                         {resumeData.projects.length >= 2 ? (
-                          <ul className="list-disc list-inside space-y-1 text-gray-800 text-base">
+                          <ul className={`list-disc list-inside space-y-1 ${getTemplateStyles().contentStyle}`}>
                             <li>{project.description}</li>
                           </ul>
                         ) : (
-                          <p className="text-gray-800 text-base">{project.description}</p>
+                          <p className={getTemplateStyles().contentStyle}>{project.description}</p>
                         )}
                       </div>
                       {(project.link || project.github) && (
@@ -314,20 +326,20 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 </h2>
                 <div className="space-y-4">
                   {resumeData.education.map((edu: any, index: number) => (
-                    <div key={index} className="flex justify-between items-start">
+                    <div key={index} className={`flex justify-between items-start ${resumeData.templateId === 'creative' ? 'bg-white/30 p-4 rounded-lg' : ''}`}>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className={`text-lg font-semibold ${getTemplateStyles().contentStyle}`}>
                           {edu.degree} {edu.major && `in ${edu.major}`}
                         </h3>
                         <p className="text-purple-600 font-medium">{edu.school}</p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+                        <div className={`flex items-center space-x-4 text-sm ${getTemplateStyles().contentStyle} mt-1`}>
                           {edu.location && <span>• {edu.location}</span>}
                           {edu.gpa && <span>• {edu.gradeType || 'GPA'}: {edu.gpa}</span>}
                           {edu.honors && <span className="font-medium text-yellow-700">• {edu.honors}</span>}
                         </div>
                       </div>
                       {edu.graduationDate && (
-                        <div className="text-right text-sm text-gray-600">
+                        <div className={`text-right text-sm ${getTemplateStyles().contentStyle}`}>
                           <p>Graduated: {edu.graduationDate}</p>
                         </div>
                       )}
@@ -343,15 +355,15 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 <h2 className={getTemplateStyles().sectionTitle}>
                   SKILLS
                 </h2>
-                <div className="space-y-2">
+                <div className={`space-y-2 ${resumeData.templateId === 'creative' ? 'bg-white/30 p-4 rounded-lg' : ''}`}>
                   {resumeData.skills.length > 5 ? (
-                    <ul className="list-decimal list-inside space-y-1 text-base text-gray-800">
+                    <ul className={`list-decimal list-inside space-y-1 ${getTemplateStyles().contentStyle}`}>
                       {resumeData.skills.map((skill: any, index: number) => (
                         <li key={index}>{skill.name}</li>
                       ))}
                     </ul>
                   ) : (
-                    <ul className="list-disc list-inside space-y-1 text-base text-gray-800">
+                    <ul className={`list-disc list-inside space-y-1 ${getTemplateStyles().contentStyle}`}>
                       {resumeData.skills.map((skill: any, index: number) => (
                         <li key={index}>{skill.name}</li>
                       ))}
