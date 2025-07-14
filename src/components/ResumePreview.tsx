@@ -91,6 +91,8 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
           contactStyle: 'text-gray-700 text-sm space-y-1',
           contentStyle: 'text-gray-800 text-sm leading-relaxed',
           experienceStyle: 'border-l-2 border-gray-300 pl-4 ml-2',
+          companyStyle: 'text-gray-600 font-medium',
+          jobTitleStyle: 'text-lg font-semibold text-gray-900',
           layout: 'single-column'
         };
       case 'minimal':
@@ -102,6 +104,8 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
           contactStyle: 'text-gray-600 text-sm font-light flex flex-wrap gap-4',
           contentStyle: 'text-gray-700 text-sm leading-loose font-light',
           experienceStyle: 'space-y-4',
+          companyStyle: 'text-gray-500 font-light',
+          jobTitleStyle: 'text-lg font-light text-gray-900',
           layout: 'single-column'
         };
       case 'creative':
@@ -113,6 +117,8 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
           contactStyle: 'text-gray-700 text-sm flex flex-wrap justify-center gap-3',
           contentStyle: 'text-gray-800 text-sm leading-relaxed',
           experienceStyle: 'bg-white/30 p-4 rounded-lg shadow-sm space-y-3',
+          companyStyle: 'text-blue-600 font-medium',
+          jobTitleStyle: 'text-lg font-semibold text-gray-900',
           layout: 'two-column'
         };
       case 'modern':
@@ -125,6 +131,8 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
           contactStyle: 'text-gray-700 text-base flex flex-wrap justify-center gap-4',
           contentStyle: 'text-gray-800 text-base leading-relaxed',
           experienceStyle: 'space-y-4',
+          companyStyle: 'text-purple-600 font-medium',
+          jobTitleStyle: 'text-lg font-semibold text-gray-900',
           layout: 'single-column'
         };
     }
@@ -237,8 +245,8 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                     <div key={index} className="mb-6">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 className={`text-lg font-semibold ${getTemplateStyles().contentStyle}`}>{exp.jobTitle}</h3>
-                          <p className="text-purple-600 font-medium">{exp.company}</p>
+                          <h3 className={getTemplateStyles().jobTitleStyle}>{exp.jobTitle}</h3>
+                          <p className={getTemplateStyles().companyStyle}>{exp.company}</p>
                         </div>
                         <div className={`text-right text-sm ${getTemplateStyles().contentStyle}`}>
                           <p>{exp.startDate} - {exp.current ? "Present" : exp.endDate}</p>
