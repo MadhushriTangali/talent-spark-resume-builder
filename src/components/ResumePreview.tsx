@@ -84,55 +84,55 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
     switch (templateId) {
       case 'classic':
         return {
-          container: 'font-serif bg-white',
-          headerStyle: 'text-center border-b-2 border-gray-800 pb-4 mb-6',
-          sectionTitle: 'text-lg font-bold text-gray-900 border-b-2 border-gray-800 pb-1 mb-3 uppercase tracking-wide',
-          nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
-          contactStyle: 'text-gray-700 text-sm space-y-1',
-          contentStyle: 'text-gray-800 text-sm leading-relaxed',
-          experienceStyle: 'border-l-2 border-gray-300 pl-4 ml-2',
-          companyStyle: 'text-gray-600 font-medium',
-          jobTitleStyle: 'text-lg font-semibold text-gray-900',
+          container: 'font-serif bg-white border-4 border-gray-800',
+          headerStyle: 'text-center border-b-4 border-gray-800 pb-6 mb-8 bg-gray-50 py-6',
+          sectionTitle: 'text-lg font-bold text-gray-900 border-b-4 border-gray-800 pb-2 mb-4 uppercase tracking-[0.2em] font-serif',
+          nameStyle: 'text-5xl font-bold text-gray-900 mb-3 font-serif tracking-wider',
+          contactStyle: 'text-gray-700 text-sm space-y-2 font-serif',
+          contentStyle: 'text-gray-800 text-sm leading-relaxed font-serif',
+          experienceStyle: 'border-l-4 border-gray-800 pl-6 ml-4 space-y-6',
+          companyStyle: 'text-gray-600 font-bold font-serif',
+          jobTitleStyle: 'text-xl font-bold text-gray-900 font-serif',
           layout: 'single-column'
         };
       case 'minimal':
         return {
-          container: 'font-light bg-white',
-          headerStyle: 'mb-8 text-left',
-          sectionTitle: 'text-lg font-light text-gray-800 mb-3 uppercase tracking-widest',
-          nameStyle: 'text-5xl font-thin text-gray-900 mb-2',
-          contactStyle: 'text-gray-600 text-sm font-light flex flex-wrap gap-4',
-          contentStyle: 'text-gray-700 text-sm leading-loose font-light',
-          experienceStyle: 'space-y-4',
-          companyStyle: 'text-gray-500 font-light',
-          jobTitleStyle: 'text-lg font-light text-gray-900',
+          container: 'font-light bg-gray-50 border-l-8 border-gray-300',
+          headerStyle: 'mb-12 text-left pl-8 border-b border-gray-200 pb-8',
+          sectionTitle: 'text-base font-light text-gray-600 mb-4 uppercase tracking-[0.3em] border-b border-gray-200 pb-1',
+          nameStyle: 'text-6xl font-extralight text-gray-900 mb-4 tracking-wide',
+          contactStyle: 'text-gray-500 text-xs font-light flex flex-wrap gap-6 mt-4',
+          contentStyle: 'text-gray-600 text-xs leading-loose font-light',
+          experienceStyle: 'space-y-8 pl-8',
+          companyStyle: 'text-gray-400 font-light italic',
+          jobTitleStyle: 'text-base font-light text-gray-800',
           layout: 'single-column'
         };
       case 'creative':
         return {
-          container: 'bg-gradient-to-br from-blue-50 to-purple-50 font-sans',
-          headerStyle: 'text-center mb-8 p-6 bg-white/50 rounded-lg',
-          sectionTitle: 'text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 uppercase',
-          nameStyle: 'text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2',
-          contactStyle: 'text-gray-700 text-sm flex flex-wrap justify-center gap-3',
-          contentStyle: 'text-gray-800 text-sm leading-relaxed',
-          experienceStyle: 'bg-white/30 p-4 rounded-lg shadow-sm space-y-3',
-          companyStyle: 'text-blue-600 font-medium',
-          jobTitleStyle: 'text-lg font-semibold text-gray-900',
+          container: 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 font-sans border-4 border-transparent bg-clip-padding',
+          headerStyle: 'text-center mb-10 p-8 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl backdrop-blur-sm',
+          sectionTitle: 'text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 uppercase tracking-wider',
+          nameStyle: 'text-5xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3',
+          contactStyle: 'text-gray-700 text-sm flex flex-wrap justify-center gap-4 font-medium',
+          contentStyle: 'text-gray-800 text-sm leading-relaxed font-medium',
+          experienceStyle: 'bg-white/40 p-6 rounded-xl shadow-lg backdrop-blur-sm space-y-4',
+          companyStyle: 'text-blue-600 font-bold',
+          jobTitleStyle: 'text-xl font-bold text-gray-900',
           layout: 'two-column'
         };
       case 'modern':
       default:
         return {
-          container: 'font-sans bg-white',
-          headerStyle: 'text-center mb-8',
-          sectionTitle: 'text-xl font-bold text-gray-900 mb-4 border-b-2 border-purple-200 pb-1',
-          nameStyle: 'text-4xl font-bold text-gray-900 mb-2',
-          contactStyle: 'text-gray-700 text-base flex flex-wrap justify-center gap-4',
+          container: 'font-sans bg-white border border-purple-100',
+          headerStyle: 'text-center mb-10 p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg',
+          sectionTitle: 'text-xl font-bold text-purple-600 mb-4 border-b-2 border-purple-300 pb-2 uppercase tracking-wide',
+          nameStyle: 'text-5xl font-bold text-gray-900 mb-3',
+          contactStyle: 'text-gray-700 text-base flex flex-wrap justify-center gap-4 font-medium',
           contentStyle: 'text-gray-800 text-base leading-relaxed',
-          experienceStyle: 'space-y-4',
-          companyStyle: 'text-purple-600 font-medium',
-          jobTitleStyle: 'text-lg font-semibold text-gray-900',
+          experienceStyle: 'space-y-6 border-l-4 border-purple-200 pl-6',
+          companyStyle: 'text-purple-600 font-bold',
+          jobTitleStyle: 'text-xl font-bold text-gray-900',
           layout: 'single-column'
         };
     }
