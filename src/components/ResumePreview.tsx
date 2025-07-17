@@ -85,7 +85,7 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
       case 'classic':
         return {
           container: 'font-serif bg-white border-4 border-gray-800',
-          headerStyle: 'text-center border-b-4 border-gray-800 pb-6 mb-8 bg-gray-50 py-6',
+          headerStyle: 'text-left border-b-4 border-gray-800 pb-6 mb-8 bg-gray-50 py-6',
           sectionTitle: 'text-lg font-bold text-gray-900 border-b-4 border-gray-800 pb-2 mb-4 uppercase tracking-[0.2em] font-serif',
           nameStyle: 'text-5xl font-bold text-gray-900 mb-3 font-serif tracking-wider',
           contactStyle: 'text-gray-700 text-sm space-y-2 font-serif',
@@ -191,36 +191,66 @@ export const ResumePreview = ({ resumeData, onEdit, onBack, resumeId }: ResumePr
                 {resumeData.personalInfo?.fullName || "Your Name"}
               </h1>
               <div className={getTemplateStyles().contactStyle}>
-                {resumeData.personalInfo?.email && (
-                  <div className="flex items-center space-x-1">
-                    <Mail className="h-4 w-4" />
-                    <span>{resumeData.personalInfo.email}</span>
-                  </div>
-                )}
-                {resumeData.personalInfo?.phone && (
-                  <div className="flex items-center space-x-1">
-                    <Phone className="h-4 w-4" />
-                    <span>{resumeData.personalInfo.phone}</span>
-                  </div>
-                )}
-                {resumeData.personalInfo?.location && (
-                  <div className="flex items-center space-x-1">
-                    <MapPin className="h-4 w-4" />
-                    <span>{resumeData.personalInfo.location}</span>
-                  </div>
-                )}
-                {resumeData.personalInfo?.linkedIn && (
-                  <div className="flex items-center space-x-1">
-                    <Linkedin className="h-4 w-4" />
-                    <span>{resumeData.personalInfo.linkedIn}</span>
-                  </div>
-                )}
-                {resumeData.personalInfo?.website && (
-                  <div className="flex items-center space-x-1">
-                    <Globe className="h-4 w-4" />
-                    <span>{resumeData.personalInfo.website}</span>
-                  </div>
-                )}
+                 {resumeData.personalInfo?.email && (
+                   <div className={`${getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? 'block' : 'flex items-center space-x-1'}`}>
+                     {getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? (
+                       <span>{resumeData.personalInfo.email}</span>
+                     ) : (
+                       <>
+                         <Mail className="h-4 w-4" />
+                         <span>{resumeData.personalInfo.email}</span>
+                       </>
+                     )}
+                   </div>
+                 )}
+                 {resumeData.personalInfo?.phone && (
+                   <div className={`${getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? 'block' : 'flex items-center space-x-1'}`}>
+                     {getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? (
+                       <span>{resumeData.personalInfo.phone}</span>
+                     ) : (
+                       <>
+                         <Phone className="h-4 w-4" />
+                         <span>{resumeData.personalInfo.phone}</span>
+                       </>
+                     )}
+                   </div>
+                 )}
+                 {resumeData.personalInfo?.location && (
+                   <div className={`${getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? 'block' : 'flex items-center space-x-1'}`}>
+                     {getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? (
+                       <span>{resumeData.personalInfo.location}</span>
+                     ) : (
+                       <>
+                         <MapPin className="h-4 w-4" />
+                         <span>{resumeData.personalInfo.location}</span>
+                       </>
+                     )}
+                   </div>
+                 )}
+                 {resumeData.personalInfo?.linkedIn && (
+                   <div className={`${getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? 'block' : 'flex items-center space-x-1'}`}>
+                     {getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? (
+                       <span>{resumeData.personalInfo.linkedIn}</span>
+                     ) : (
+                       <>
+                         <Linkedin className="h-4 w-4" />
+                         <span>{resumeData.personalInfo.linkedIn}</span>
+                       </>
+                     )}
+                   </div>
+                 )}
+                 {resumeData.personalInfo?.website && (
+                   <div className={`${getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? 'block' : 'flex items-center space-x-1'}`}>
+                     {getTemplateStyles().layout === 'single-column' && (resumeData.templateId === 'classic' || resumeData.templateId === 'minimal') ? (
+                       <span>{resumeData.personalInfo.website}</span>
+                     ) : (
+                       <>
+                         <Globe className="h-4 w-4" />
+                         <span>{resumeData.personalInfo.website}</span>
+                       </>
+                     )}
+                   </div>
+                 )}
               </div>
             </div>
 
