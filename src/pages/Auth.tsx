@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,11 +61,20 @@ const Auth = () => {
         });
         
         if (error) {
-          toast({
-            title: "Error signing up",
-            description: error.message,
-            variant: "destructive",
-          });
+          // Check if error is due to existing email
+          if (error.message.includes("already registered") || error.message.includes("already exists") || error.message.includes("User already registered")) {
+            toast({
+              title: "Email already exists",
+              description: "An account with this email already exists. Please sign in instead.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Error signing up",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
         } else {
           toast({
             title: "Check your email",
