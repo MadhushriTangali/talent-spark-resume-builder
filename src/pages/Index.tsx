@@ -29,7 +29,8 @@ const Index = () => {
     education: [],
     skills: [],
     projects: [],
-    certifications: []
+    certifications: [],
+    templateId: 'modern'
   });
   const [resumeId, setResumeId] = useState<string | undefined>();
 
@@ -116,7 +117,8 @@ const Index = () => {
       education: [],
       skills: [],
       projects: [],
-      certifications: []
+      certifications: [],
+      templateId: resumeData.templateId || 'modern' // Preserve template ID
     });
     setResumeId(undefined);
   };
