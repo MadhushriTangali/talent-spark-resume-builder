@@ -52,7 +52,7 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -75,10 +75,18 @@ const Auth = () => {
               variant: "destructive",
             });
           }
-        } else {
+        } else if (data.user && !data.user.email_confirmed_at) {
+          // User was created and needs email confirmation
           toast({
             title: "Check your email",
             description: "We've sent you a confirmation link to complete your registration.",
+          });
+        } else if (!data.user) {
+          // No error but no user created - likely existing email
+          toast({
+            title: "Email already exists",
+            description: "An account with this email already exists. Please sign in instead.",
+            variant: "destructive",
           });
         }
       }
